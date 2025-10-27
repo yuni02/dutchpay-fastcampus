@@ -2,12 +2,17 @@ import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { RecoilRoot } from "recoil"
 import { AddMembers } from "./AddMembers"
+import { MemoryRouter, Route, Routes } from "react-router-dom"
 
 const renderComponent = () => {
   render(
-    <RecoilRoot>
-      <AddMembers />
-    </RecoilRoot>
+    <MemoryRouter initialEntries={['/group/test-guid/members']}>
+      <RecoilRoot>
+        <Routes>
+          <Route path="/group/:guid/members" element={<AddMembers />} />
+        </Routes>
+      </RecoilRoot>
+    </MemoryRouter>
   )
 
   const input = screen.getByTestId("input-member-names")
