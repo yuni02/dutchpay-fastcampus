@@ -1,31 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
-import { Routes, Route } from 'react-router-dom';
-import { Test } from './components/Test';
+import "./App.css"
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
+import { CreateGroup } from "./components/CreateGroup"
+import { AddMembers } from "./components/AddMembers"
+import { ExpenseMain } from "./components/ExpenseMain"
+import { RecoilRoot } from "recoil"
+import "bootstrap/dist/css/bootstrap.min.css"
+import { ROUTES } from "./routes"
+import { RecoilDevTools } from "recoil-toolkit"
+
 
 function App() {
   return (
-    <div className="App">
-      <Routes>
-        <Route path="/" element={
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <p>
-              Edit <code>src/App.js</code> and save to reload.
-            </p>
-            <a
-              className="App-link"
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn React
-            </a>
-          </header>
-        } />
-        <Route path="/test" element={<Test />} />
-      </Routes>
-    </div>
+      <BrowserRouter>
+        <RecoilRoot>
+          <RecoilDevTools forceSerialize={false} />
+          <Routes>
+            <Route path="/" element={<Navigate to={ROUTES.CREATE_GROUP} />} />
+            <Route path={ROUTES.CREATE_GROUP} element={<CreateGroup />} />
+            <Route path={ROUTES.ADD_MEMBERS} element={<AddMembers />} />
+            <Route path={ROUTES.EXPENSE_MAIN} element={<ExpenseMain />} />
+          </Routes>
+        </RecoilRoot>
+      </BrowserRouter>
   );
 }
 
