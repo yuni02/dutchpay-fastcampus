@@ -8,10 +8,11 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import { ROUTES } from "./routes"
 import { RecoilDevTools } from "recoil-toolkit"
 
+import { Amplify } from "aws-amplify"
 
 function App() {
   return (
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <RecoilRoot>
           <RecoilDevTools forceSerialize={false} />
           <Routes>
