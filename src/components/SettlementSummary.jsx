@@ -97,7 +97,7 @@ export const SettlementSummary = () => {
         link.click()
       })
       .catch((err) => {
-        console.err(err)
+        console.error(err)
       })
 
   }

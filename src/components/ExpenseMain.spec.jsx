@@ -1,8 +1,21 @@
-import { render, screen, within } from "@testing-library/react"
+import { render, screen, within, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { RecoilRoot } from "recoil"
 import { groupMembersState } from "../state/groupMembers"
 import { ExpenseMain } from "./ExpenseMain"
+import * as api from "aws-amplify/api"
+
+// Mock AWS Amplify API
+jest.mock("aws-amplify/api")
+
+const mockPut = require("aws-amplify/api").put
+
+beforeEach(() => {
+  mockPut.mockReturnValue({
+    response: Promise.resolve({})
+  })
+  window.alert = jest.fn()
+})
 
 
 const renderComponent = () => {
@@ -106,10 +119,13 @@ describe('비용 정산 메인 페이지', () => {
       await addNewExpense()
     })
 
-    test('날짜, 내용, 결제자, 금액 데이터가 정산 리스트에 추가 된다', () => {
+    test('날짜, 내용, 결제자, 금액 데이터가 정산 리스트에 추가 된다', async () => {
       const expenseListComponent = screen.getByTestId('expenseList')
-      const dateValue = within(expenseListComponent).getByText('2022-10-10')
-      expect(dateValue).toBeInTheDocument()
+
+      await waitFor(() => {
+        const dateValue = within(expenseListComponent).getByText('2022-10-10')
+        expect(dateValue).toBeInTheDocument()
+      })
 
       const descValue = within(expenseListComponent).getByText('장보기')
       expect(descValue).toBeInTheDocument()
@@ -121,9 +137,11 @@ describe('비용 정산 메인 페이지', () => {
       expect(amountValue).toBeInTheDocument()
     })
 
-    test('정산 결과 또한 업데이트가 된다.', () => {
-      const totalText = screen.getByText(/2 명이서 총 30000 원 지출/i)
-      expect(totalText).toBeInTheDocument()
+    test('정산 결과 또한 업데이트가 된다.', async () => {
+      await waitFor(() => {
+        const totalText = screen.getByText(/2 명이서 총 30000 원 지출/i)
+        expect(totalText).toBeInTheDocument()
+      })
 
       const transactionText = screen.getByText(/영희가 영수에게 15000 원 보내기/i)
       expect(transactionText).toBeInTheDocument()
